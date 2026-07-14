@@ -1,0 +1,99 @@
+{
+  "name": "Jojoba Economic Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "__CRON__"
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -400,
+        32
+      ],
+      "typeVersion": 1.3,
+      "id": "22e9dd7c-18ad-4c6a-867b-acf2576af950"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "__PUBLIC_BASE_URL__/api/webhook/user/process-next?language=__LANGUAGE__&send_email=false",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Webhook-Token",
+              "value": "__WEBHOOK_TOKEN__"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "name": "HTTP Request - Get Next",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 4.4,
+      "id": "ae5ca6de-930b-490f-a640-805522dfcd2d"
+    },
+    {
+      "parameters": {
+        "fromEmail": "youremail@gmail.com",
+        "toEmail": "={{ $json.email_string }}",
+        "subject": "=Jojoba Economic News - {{ $json.question }}",
+        "html": "=<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n<title>The Jojoba Economic Review</title>\n</head>\n<body style=\"margin:0;padding:0;background-color:#e8e4d8;font-family:Georgia,'Times New Roman',Times,serif;color:#1a1a1a;\">\n\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#e8e4d8\" style=\"background-color:#e8e4d8;\">\n<tr><td align=\"center\" style=\"padding:24px 12px;\">\n\n<table role=\"presentation\" width=\"640\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#fdfcf7\" style=\"max-width:640px;width:100%;background-color:#fdfcf7;border:1px solid #c8c2b0;\">\n\n  <tr>\n    <td style=\"padding:18px 32px 0 32px;border-bottom:1px solid #d4cdb5;\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n        <tr>\n          <td align=\"left\" style=\"font-family:Georgia,serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#6b5d3f;font-weight:700;padding-bottom:10px;\">Vol. I &mdash; Daily Edition</td>\n          <td align=\"center\" style=\"font-family:Georgia,serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#6b5d3f;font-style:italic;padding-bottom:10px;\">Est. MMXXVI</td>\n          <td align=\"right\" style=\"font-family:Georgia,serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#6b5d3f;font-weight:700;padding-bottom:10px;\">Morning Briefing</td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n\n  <tr>\n    <td align=\"center\" style=\"padding:18px 32px 6px 32px;background-color:#fdfcf7;\">\n      <div style=\"font-family:Georgia,'Times New Roman',serif;font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1;color:#0d0d0d;\">\n        The Jojoba <span style=\"color:#8b6914;font-style:italic;\">Economic</span> Review\n      </div>\n    </td>\n  </tr>\n\n  <tr>\n    <td align=\"center\" style=\"padding:0 32px 18px 32px;border-bottom:3px solid #1a1a1a;\">\n      <div style=\"font-family:Georgia,serif;font-style:italic;font-size:13px;color:#5a4f3a;letter-spacing:0.5px;\">\n        &mdash; Intelligence for the Discerning Investor &mdash;\n      </div>\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:2px 32px 0 32px;border-bottom:1px solid #1a1a1a;font-size:0;line-height:0;\">&nbsp;</td>\n  </tr>\n\n  <tr>\n    <td bgcolor=\"#1a1a1a\" style=\"background-color:#1a1a1a;padding:10px 32px;\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n        <tr>\n          <td align=\"left\" style=\"font-family:Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#fdfcf7;\">{{ $now.format('EEEE, dd MMMM yyyy') }}</td>\n          <td align=\"center\" style=\"font-family:Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a542;font-weight:700;\">&#9733; AI Edition &#9733;</td>\n          <td align=\"right\" style=\"font-family:Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#fdfcf7;\">{{ $now.format('HH:mm') }} WIB</td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:28px 32px 0 32px;\">\n      <div style=\"font-family:Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:2.5px;color:#8b6914;font-weight:700;padding-bottom:6px;border-bottom:1px solid #d4cdb5;\">\n        Today's Briefing &middot; Economic Intelligence\n      </div>\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:8px 32px 0 32px;\">\n      <h1 style=\"margin:0;font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.15;font-weight:700;color:#0d0d0d;letter-spacing:-0.3px;\">\n        {{ $json.question || 'Market Analysis' }}\n      </h1>\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:12px 32px 14px 32px;border-bottom:1px solid #d4cdb5;\">\n      <p style=\"margin:0;font-family:Georgia,serif;font-size:15px;line-height:1.5;font-style:italic;color:#4a4233;\">\n        An AI-assisted analysis drawing on current economic data, sector indicators, and contextual market intelligence.\n      </p>\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:14px 32px 18px 32px;\">\n      <div style=\"font-family:Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#6b5d3f;\">\n        <span style=\"font-weight:700;color:#1a1a1a;\">By Jojoba AI Desk</span>\n        &nbsp;|&nbsp; Filed {{ $now.format('HH:mm') }} WIB\n        &nbsp;|&nbsp; {{ $json.processing_time || 0 }}s analysis\n        &nbsp;|&nbsp; {{ $json.iterations || 0 }} iterations\n      </div>\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:0 32px 8px 32px;\">\n      {{ $json.response_html || '<p style=\"margin:0 0 14px 0;font-family:Georgia,serif;font-size:16px;line-height:1.75;color:#1a1a1a;\">No analysis available at the time of publication.</p>' }}\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:8px 32px 8px 32px;\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n        <tr><td style=\"border-top:2px solid #1a1a1a;font-size:0;line-height:0;\">&nbsp;</td></tr>\n        <tr>\n          <td align=\"center\" style=\"padding:14px 24px;font-family:Georgia,serif;font-style:italic;font-size:18px;line-height:1.4;color:#4a4233;\">\n            &ldquo;Read the data. Question the narrative. Decide for yourself.&rdquo;\n          </td>\n        </tr>\n        <tr><td style=\"border-top:1px solid #1a1a1a;font-size:0;line-height:0;\">&nbsp;</td></tr>\n      </table>\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:16px 32px 24px 32px;\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;\">\n        <tr>\n          <td align=\"center\" width=\"25%\" style=\"padding:14px 4px;border-right:1px solid #d4cdb5;font-family:Georgia,serif;\">\n            <div style=\"font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#6b5d3f;margin-bottom:4px;\">Processing</div>\n            <div style=\"font-size:18px;font-weight:700;color:#0d0d0d;\">{{ $json.processing_time || 0 }}s</div>\n          </td>\n          <td align=\"center\" width=\"25%\" style=\"padding:14px 4px;border-right:1px solid #d4cdb5;font-family:Georgia,serif;\">\n            <div style=\"font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#6b5d3f;margin-bottom:4px;\">Iterations</div>\n            <div style=\"font-size:18px;font-weight:700;color:#0d0d0d;\">{{ $json.iterations || 0 }}</div>\n          </td>\n          <td align=\"center\" width=\"25%\" style=\"padding:14px 4px;border-right:1px solid #d4cdb5;font-family:Georgia,serif;\">\n            <div style=\"font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#6b5d3f;margin-bottom:4px;\">In Queue</div>\n            <div style=\"font-size:18px;font-weight:700;color:#0d0d0d;\">{{ $json.queue_remaining || 0 }}</div>\n          </td>\n          <td align=\"center\" width=\"25%\" style=\"padding:14px 4px;font-family:Georgia,serif;\">\n            <div style=\"font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#6b5d3f;margin-bottom:4px;\">Recipients</div>\n            <div style=\"font-size:18px;font-weight:700;color:#0d0d0d;\">{{ $json.email_count || 0 }}</div>\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n\n  <tr>\n    <td style=\"padding:0 32px 24px 32px;\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#f5f1e3\" style=\"background-color:#f5f1e3;border-left:4px solid #8b6914;\">\n        <tr>\n          <td style=\"padding:14px 18px;\">\n            <div style=\"font-family:Georgia,serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#8b6914;font-weight:700;margin-bottom:8px;\">\n              &#9197; In Tomorrow's Edition\n            </div>\n            <div style=\"font-family:Georgia,serif;font-size:14px;font-style:italic;color:#4a4233;line-height:1.5;\">\n              {{ $json.next_question || 'To be announced &mdash; check back tomorrow for the next briefing.' }}\n            </div>\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n\n  <tr>\n    <td bgcolor=\"#1a1a1a\" style=\"background-color:#1a1a1a;padding:20px 32px;text-align:center;\">\n      <div style=\"font-family:Georgia,serif;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a542;font-style:italic;font-weight:700;margin-bottom:8px;\">\n        &#9888; Not Financial Advice &middot; For Educational Purposes Only\n      </div>\n      <div style=\"font-family:Georgia,serif;font-size:11px;line-height:1.5;color:#c8c2b0;\">\n        Always consult a licensed financial advisor before making investment decisions. Past performance is not indicative of future results.\n      </div>\n      <div style=\"font-family:Georgia,serif;font-size:10px;letter-spacing:0.5px;color:#8a8270;margin-top:10px;padding-top:10px;border-top:1px solid #4a4233;\">\n        The Jojoba Economic Review &middot; Published by Jojoba AI &middot; Sent to {{ $json.email_count || 0 }} subscriber(s)\n      </div>\n    </td>\n  </tr>\n\n</table>\n\n</td></tr>\n</table>\n\n</body>\n</html>",
+        "options": {}
+      },
+      "name": "Email Send",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [
+        256,
+        0
+      ],
+      "typeVersion": 2.1,
+      "id": "f93a5f29-23a2-412b-a1fa-720059247460"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Get Next",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Get Next": {
+      "main": [
+        [
+          {
+            "node": "Email Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

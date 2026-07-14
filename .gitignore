@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+
+# Environment — never commit secrets
+.env
+
+# Docker volumes
+n8n_data/
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Local data
+*.db
+sessions/
+
+# index vektor hasil generate (hapus baris ini jika ingin commit index prebuilt, mis. untuk HF Spaces)
+data/chroma_db/

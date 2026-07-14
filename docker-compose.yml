@@ -1,0 +1,55 @@
+services:
+  app:
+    build: .
+    container_name: jojoba-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - MONGO_URL=mongodb://host.docker.internal:27017
+      - FASTEMBED_CACHE_PATH=/fastembed_cache
+      - HF_HUB_ENABLE_HF_TRANSFER=1
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./n8n:/app/n8n:ro
+      - fastembed_cache:/fastembed_cache
+    networks:
+      - jojoba-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - n8n
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: jojoba-n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_WEBHOOK_URL=http://localhost:5678
+      - N8N_PUBLIC_API_PORT=5678
+      - DB_TYPE=sqlite
+      - N8N_USER_FOLDER=/home/node/.n8n
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168
+      - N8N_API_ENABLED=true
+    networks:
+      - jojoba-network
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n/workflows:/home/node/.n8n/workflows:ro
+
+networks:
+  jojoba-network:
+    driver: bridge
+
+volumes:
+  n8n_data:
+  fastembed_cache:
