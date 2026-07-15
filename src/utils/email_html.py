@@ -6,7 +6,7 @@ from typing import Optional
 # Bump this whenever the file changes — lets you confirm in production
 # (via `python3 -c "import email_html; print(email_html.__version__)"`)
 # that the server is actually running this version and not a stale copy.
-__version__ = "2026-07-15.2-crlf-fix"
+__version__ = "2026-07-15.3-bold-fix"
 
 try:
     import markdown as _markdown_lib
@@ -50,7 +50,9 @@ def markdown_to_html(text: str) -> str:
 
     # Repair a closing "**" that got split across a line break into
     # "*\n*" (with optional stray whitespace around the newline).
-    text = re.sub(r'\*[ \t]*\n[ \t]*\*(?!\*)', '**\n', text)
+    # FIX: Changed replacement from '**\n' to '**' so the bold marker
+    # is restored without an extra newline that breaks the markdown parser.
+    text = re.sub(r'\*[ \t]*\n[ \t]*\*(?!\*)', '**', text)
 
     # Collapse 3+ consecutive asterisks down to a plain "**" bold marker,
     # since stray extra asterisks are a common artifact of the same bug.
