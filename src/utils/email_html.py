@@ -3,6 +3,11 @@ import html as html_lib
 from datetime import datetime
 from typing import Optional
 
+# Bump this whenever the file changes — lets you confirm in production
+# (via `python3 -c "import email_html; print(email_html.__version__)"`)
+# that the server is actually running this version and not a stale copy.
+__version__ = "2026-07-15.2-crlf-fix"
+
 try:
     import markdown as _markdown_lib
     _MARKDOWN_AVAILABLE = True
@@ -31,6 +36,13 @@ def markdown_to_html(text: str) -> str:
         return ""
 
     text = str(text)
+
+    # Normalize line endings FIRST. If the raw text arrives with CRLF
+    # (\r\n) — common when it's passed through certain DB drivers, Windows
+    # -originated tooling, or some HTTP/JSON round-trips — the repair
+    # regexes below (which look for a literal \n) would silently fail to
+    # match, leaving the split "*\r\n*" marker broken and unfixed.
+    text = text.replace('\r\n', '\n').replace('\r', '\n')
 
     # Escape any literal HTML so the answer can't inject markup/scripts,
     # while leaving markdown syntax characters (*, -, #, etc.) untouched.
