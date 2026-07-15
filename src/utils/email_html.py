@@ -27,6 +27,7 @@ def generate_economic_news_email(
         HTML string for email body
     """
     
+    # Format next question display
     if next_question:
         if len(next_question) > 30:
             next_display = next_question[:30] + '...'
