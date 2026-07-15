@@ -469,6 +469,7 @@ async def webhook_send_batch(
         logger.error(f"❌ Batch email error: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
 # ============================================
 # WEBHOOK VALIDATION & TESTING
 # ============================================
